@@ -1,12 +1,12 @@
 {
-  "name": "swagger-axios-codegen",
-  "version": "0.15.8",
+  "name": "@rosaan/swagger-axios-codegen",
+  "version": "0.1.1",
   "main": "./dist/index",
   "typings": "./dist/",
-  "author": "Manwei Leung <mic.liangwenwei@foxmail.com>",
+  "author": "Rosaan Ramasamy <rosaan@antdragon.co>",
   "license": "MIT",
   "repository": {
-    "url": "https://github.com/Manweill/swagger-axios-codegen.git",
+    "url": "https://github.com/rosaan/swagger-axios-codegen",
     "type": "git"
   },
   "keywords": [

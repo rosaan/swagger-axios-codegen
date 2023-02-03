@@ -10,14 +10,14 @@ export const isOpenApiGenerics = (s: string) => /^.+\[.+\]$/.test(s) || /^.+\«.
 
 export const isGenerics = (s: string) => {
   return /^.+\<.+\>$/.test(s)
-};
+}
 export const isDefinedGenericTypes = (x: string) => definedGenericTypes.some(i => i === x)
 
 export function setDefinedGenericTypes(types: string[] = []) {
   definedGenericTypes.push(...UniversalGenericTypes, ...AbpGenericTypes, ...types)
 }
 
-export const getDefinedGenericTypes = () => definedGenericTypes;
+export const getDefinedGenericTypes = () => definedGenericTypes
 
 /**
  * 分解泛型接口
@@ -40,14 +40,13 @@ export function getGenericsClassNames(definitionClassName: string): string {
     // 泛型类型 T 的类型名称
     const TClassName = definitionClassName.slice(splitIndex + 1, -1)
     if (isDefinedGenericTypes(interfaceClassName)) {
-      str = interfaceClassName === 'IDictionary' || interfaceClassName === 'Dictionary'
-        ? `${interfaceClassName}<object>`
-        : `${interfaceClassName}<${refClassName(TClassName)}>`
-
+      str =
+        interfaceClassName === 'IDictionary' || interfaceClassName === 'Dictionary'
+          ? `${interfaceClassName}<object>`
+          : `${interfaceClassName}<${refClassName(TClassName)}>`
     } else {
       str = trimString(RemoveSpecialCharacters(definitionClassName), '_', 'right')
     }
-
   } else {
     // console.log('getGenericsClassNames', definitionClassName)
     str = toBaseType(trimString(RemoveSpecialCharacters(definitionClassName), '_', 'right'))
@@ -133,7 +132,6 @@ export function getMethodNameByPath(path: string) {
   return ''
 }
 
-
 export function getClassNameByPath(path: string) {
   const paths = path.split('/')
   if (paths.length > 1) {
@@ -155,7 +153,7 @@ export function trimString(str: string, char: string, type: string) {
   return str.replace(/^\s+|\s+$/g, '')
 }
 
-/** 
+/**
  * 泛型类名提取数组
  * A<B<C>> => [A,B,C]
  **/
@@ -164,9 +162,7 @@ export function genericsToClassNames(modelName: string) {
     const names = modelName.split(/[<>]+/)
     names.pop()
     return names
-  }
-  else if (modelName.endsWith('[]'))
-    return [modelName.replace('[]', '')]
+  } else if (modelName.endsWith('[]')) return [modelName.replace('[]', '')]
   else {
     return [modelName]
   }
@@ -186,13 +182,16 @@ export function classNamesToGenerics(classNames: string[]) {
   }
 }
 
-export function findDeepRefs(imports: string[], allDefinition: IDefinitionClass[], allEnums: IDefinitionEnum[], currentImports: string[] = []) {
-
+export function findDeepRefs(
+  imports: string[],
+  allDefinition: IDefinitionClass[],
+  allEnums: IDefinitionEnum[],
+  currentImports: string[] = []
+) {
   let result: string[] = currentImports ?? []
   // if (imports.includes('AuthUserStationDto[]')) {
   //   console.log('result init', imports, currentImports);
   // }
-
 
   for (const model of imports) {
     const modelNames = genericsToClassNames(model)
@@ -202,8 +201,7 @@ export function findDeepRefs(imports: string[], allDefinition: IDefinitionClass[
       // }
       let ref = null
       ref = allDefinition.find(item => modelName === item.name)
-      if (ref == null)
-        ref = allDefinition.find(item => modelName.startsWith(item.name))
+      if (ref == null) ref = allDefinition.find(item => modelName.startsWith(item.name))
       // if (modelNames.includes('AuthUserStationDto[]')) {
       //   console.log('ref', JSON.stringify(ref));
       //   // return []
@@ -215,8 +213,7 @@ export function findDeepRefs(imports: string[], allDefinition: IDefinitionClass[
         //   // return []
         // }
 
-        result.push(ref.name);
-
+        result.push(ref.name)
 
         if (ref.value.imports.length > 0) {
           let uniqueImports: string[] = []
@@ -225,7 +222,6 @@ export function findDeepRefs(imports: string[], allDefinition: IDefinitionClass[
             uniqueImports.push(importItem)
           }
 
-
           let deepRefs = findDeepRefs(uniqueImports, allDefinition, allEnums, result)
           // if (ref.value.imports.includes('MotorMonthlyCurrentItem') || ref.value.imports.includes('MotorMonthlyDto')) {
           //   console.log('uniqueImports', deepRefs);
@@ -233,10 +229,9 @@ export function findDeepRefs(imports: string[], allDefinition: IDefinitionClass[
           if (!!deepRefs) {
             result = deepRefs
           }
-
         }
       } else {
-        ref = allEnums.find(item => modelNames.some((modelName) => modelName.startsWith(item.name)))
+        ref = allEnums.find(item => modelNames.some(modelName => modelName.startsWith(item.name)))
         if (ref) {
           result.push(ref.name)
         }
@@ -244,11 +239,9 @@ export function findDeepRefs(imports: string[], allDefinition: IDefinitionClass[
     }
   }
 
-
   if (imports.includes('AuthUserStationDto')) {
-    console.log('result', result);
+    console.log('result', result)
   }
-
 
   return result
 }
