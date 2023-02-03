@@ -227,8 +227,7 @@ ${options.useStaticMethod ? 'static' : ''} ${camelcase(
       ? `options.headers = {${headerParameters}, ...options.headers }`
       : ''}
     const configs:IRequestConfig = getConfigs('${method}', '${contentType}', url, options)
-    ${parsedParameters && queryParameters.length > 0 ? 'configs.params = {' + queryParameters.join(',') + '}' : ''}
-    
+    ${parsedParameters && queryParameters.length > 0 ? 'configs.params = params}
     
     ${requestBodyString(method, parsedParameters, bodyParameter, requestBody, contentType, formData)}
     
